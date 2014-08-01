@@ -3,12 +3,24 @@
 
 " vim:set ft=vim
 "
+"
+" ____  _ _ _ _                        _       _         _
+"|  _ \(_) | (_)                      | |     | |       (_)
+"| |_) |_| | |_ _ __  _   ___  __   __| | ___ | |___   ___ _ __ ___
+"|  _ <| | | | | '_ \| | | \ \/ /  / _` |/ _ \| __\ \ / / | '_ ` _ \
+"| |_) | | | | | | | | |_| |>  <  | (_| | (_) | |_ \ V /| | | | | | |
+"|____/|_|_|_|_|_| |_|\__,_/_/\_\  \__,_|\___/ \__| \_/ |_|_| |_| |_|
+"
+"
+"
 " This my personal .vimrc, I don't recommend you copy it, just
 " use the pieces you want (and understands!). When you copy a
 " .vimrc in the entirety, weird and unexpexted things can happen
 "
 " You can use ~/.vimrc.before.local and ~/.vimrc.private
 " for your local and private settings
+
+
 "}
 
 " SECTION: Initialize"{
@@ -16,6 +28,7 @@
 
 set nocompatible
 filetype off
+syn on
 
 " CATEGORY: Startup"{
 " =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
@@ -457,9 +470,6 @@ filetype plugin indent on
 " Vimrc"{
 " --------------------------------------------------------------------
 
-augroup vimrc
-    autocmd!
-augroup END
 
 "augroup VIMRC
 "    au!
@@ -688,6 +698,43 @@ endfunction
 
 inoremap <special> <expr> <Esc>[200~ XTermPasteBegin()
 "}
+
+function! SourceAllFiles(dir)"{
+" Source files in a directory
+    let l:findop=system("find ".a:dir." -name \"*.vimrc\"")
+    let l:sourcenames=split(l:findop,"\n")
+    for fname in l:sourcenames
+        exec "source ".fname
+    endfor
+endfunction
+" call Sourceallfiles($HOME."/.vim/vimrc")
+"}
+
+function! VimrcTOHtml()"{
+    TOhtml
+    try
+        silent exe '%s/&quot;\(\s\+\)\*&gt; \(.\+\)</"\1<a href="#\2" style="color: #bdf">\2<\/a></g'
+    catch
+    endtry
+
+    try
+        silent exe '%s/&quot;\(\s\+\)=&gt; \(.\+\)</"\1<a name="\2" style="color: #fff">\2<\/a></g'
+    catch
+    endtry
+
+    exe ":write!"
+    exe ":bd"
+endfunction
+"}
+
+function! InsertFiglet()
+    let text = input("Text: ")
+    let font = input("Font: ", "big")
+    let lineBegin = input("Begin of line: ", " * ")
+    execute "r!figlet -w 150 ".shellescape(text)." -f ".shellescape(font)."|sed -e 's/\\(.*\\)/".lineBegin."\\1/'|sed -e 's/ \\+$//'"
+endfunction
+nmap <leader>z :call InsertFiglet()<CR>
+
 "}
 
 " SECTION: Encoding"{
@@ -891,7 +938,7 @@ if has('persistent_undo')
     set undodir=$VIMHOME/.cache/undo
     set undofile
     set undolevels=2048
-    set undoreload=10000
+    set undoreload=65538
 endif
 
 set list
