@@ -28,7 +28,6 @@
 
 set nocompatible
 filetype off
-syn on
 
 " CATEGORY: Startup"{
 " =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
@@ -47,6 +46,7 @@ endif
 " control sequences when a user enters(t_SI) and leaves(t_EI)
 let &t_SI .= "\e[3 q"
 let &t_EI .= "\e[1 q"
+
 
 "}
 
@@ -523,6 +523,12 @@ augroup Filetype
     autocmd BufNewFile,BufRead *.htm,*.html set filetype=html.css.javascript
     autocmd FileType html.css.javascript set nocindent autoindent smartindent
 
+    " --------------------------------------------------------[Php]---
+    autocmd BufNewFile *.php execute "set paste" | execute "normal i<?php\r/*\r * =====================================================================\r *        Version:  1.0\r *        Created:  ".strftime("%x")." ".strftime("%X")."\r *         Author:  ".g:billinux_snips_author."\r *        Company:  ".g:billinux_snips_company."\r * =====================================================================\r */\r?>\r" | execute "set nopaste"
+    autocmd FileType php set syntax=php.doxygen
+    autocmd FileType php command! Phpcs execute RunPhpcs()
+
+
     " -------------------------------------------------------[Yaml]---
 
     " -------------------------------------------------------[Haml]---
@@ -562,6 +568,7 @@ augroup Filetype
 
     " ----------------------------------------------------------[C]---
     au BufRead,BufNewFile *.h,*.c set filetype=c.doxygen
+    autocmd BufNewFile *.cpp,*.h,*.c execute "set paste" | execute "normal i/*\r * =====================================================================\r *        Version:  1.0\r *        Created:  ".strftime("%x")." ".strftime("%X")."\r *         Author:  ".g:billinux_snips_author."\r *        Company:  ".g:billinux_snips_company."\r * =====================================================================\r */\r\r" | execute "set nopaste"
 
 augroup END
 "}
@@ -726,6 +733,8 @@ function! VimrcTOHtml()"{
     exe ":bd"
 endfunction
 "}
+
+
 
 function! InsertFiglet()
     let text = input("Text: ")
@@ -1343,26 +1352,29 @@ endif
 "   rxvt-unicode:   change font in .Xresources or .Xdefaults file and
 "                   run : urxvt -fn 'xft:DejaVu Sans Mono for Powerline-11'
 "                   for testing
-if s:is_running_win
+if isdirectory(expand($VIMBUNDLE . "/vim-airline"))
+
+    let g:airline_symbols={}
     let g:airline#extensions#tabline#enabled = 1
     let g:airline_theme             = 'badwolf'
-    let g:airline_fugitive_prefix = '⎇'
     let g:airline_paste_symbol = 'ρ'
-    let g:airline_powerline_fonts = 1
-else
-    if isdirectory(expand($VIMBUNDLE . "/vim-airline"))
-        let g:airline#extensions#tabline#enabled = 1
-        let g:airline_theme             = 'badwolf'
-        let g:airline_fugitive_prefix = '⎇'
-        let g:airline_paste_symbol = 'ρ'
-        " let g:airline_section_y = "%{strlen(&ft)?&ft:'none'}"
+    let g:airline_symbols.readonly = ''
 
-        " Cygwin terminal
-        if s:is_running_cygwin && !s:is_running_gui
-            let g:airline_powerline_fonts = 1
-        endif
-
+    if !exists('g:airline_powerline_fonts')
+        let g:airline_powerline_fonts=1
     endif
+
+"    if !exists('g:airline_symbols')
+"        let g:airline_symbols={}
+"
+"        let g:airline_left_sep = ''
+"        let g:airline_left_alt_sep = ''
+"        let g:airline_right_sep = ''
+"        let g:airline_right_alt_sep = ''
+"        let g:airline_symbols.branch = ''
+"        let g:airline_symbols.linenr = ''
+"        " let g:airline_section_y = "%{strlen(&ft)?&ft:'none'}"
+"    endif
 endif
 "}
 
@@ -2260,6 +2272,8 @@ endif
 
 "}
 
-
+" Search and Replace"{
+" http://vim.wikia.com/wiki/Search_and_replace
+"}
 
 "}
