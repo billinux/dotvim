@@ -47,7 +47,6 @@ endif
 let &t_SI .= "\e[3 q"
 let &t_EI .= "\e[1 q"
 
-
 "}
 
 " CATEGORY: Environment"{
@@ -323,7 +322,7 @@ if !exists("g:override_billinux_bundles")
     endif
 "}
 
-" " PLUGIN: C
+" CATEGORY: C"{
 " --------------------------------------------------------------------
 
     if count(g:billinux_bundle_groups, 'c')
@@ -333,6 +332,7 @@ if !exists("g:override_billinux_bundles")
             NeoBundle 'justmao945/vim-clang'
         endif
     endif
+"}
 
     " CATEGORY: PHP"{
 " --------------------------------------------------------------------
@@ -407,6 +407,7 @@ endif
         NeoBundle 'lilydjwg/colorizer'
         NeoBundle 'hail2u/vim-css3-syntax'
         NeoBundle 'wavded/vim-stylus'
+        NeoBundle 'groenewege/vim-less'
     endif
 "}
 
@@ -471,10 +472,10 @@ filetype plugin indent on
 " --------------------------------------------------------------------
 
 
-"augroup VIMRC
+augroup VIMRC
 "    au!
-"    autocmd BufWritePost  ~/.vimrc source ~/.vimrc
-"augroup END
+"    autocmd BufWritePost  .vimrc source ~/.vimrc
+augroup END
 "}
 
 " Text"{
@@ -540,6 +541,12 @@ augroup Filetype
 
     " -------------------------------------------------------[Sass]---
     autocmd BufNewFile,BufRead *.sass set filetype=sass
+
+    " -------------------------------------------------------[Scss]---
+    let g:sass_output_file = ""
+    let g:sass_enabled = 1
+    let g:sass_path_maps = {}
+    autocmd BufWritePost *.scss call SassCompile()
 
     " -------------------------------------------------[Javascript]---
     autocmd BufNewFile,BufRead *.js set filetype=javascript
@@ -734,15 +741,85 @@ function! VimrcTOHtml()"{
 endfunction
 "}
 
+function! SassCompile()"{
+    if g:sass_enabled == 0
+        return
+    endif
+    let curfile = expand('%:p')
+    let inlist = 0
+    for fpath in keys(g:sass_path_maps)
+        if fpath == curfile
+            let g:sass_output_file = g:sass_path_maps[fpath]
+            let inlist = 1
+            break
+        endif
+    endfor
+    if g:sass_output_file == ""
+        let g:sass_output_file = input("Please specify an output CSS file: ",g:sass_output_file,"file")
+    endif
+    let l:op = system("sass --no-cache --style compressed ".@%." ".g:sass_output_file)
+    if l:op != ""
+        echohl Error | echo "Error compiling sass file" | echohl None
+        let &efm="Syntax error: %m %#on line %l of %f%.%#"
+        cgete [l:op]
+        cope
+    endif
+    if inlist == 0
+        let choice = confirm("Would you like to keep using this output path for this sass file?","&Yes\n&No")
+        if choice == 1
+            let g:sass_path_maps[curfile] = g:sass_output_file
+        endif
+    endif
+    let g:sass_output_file = ""
+endfunction
+"}
 
-
-function! InsertFiglet()
+function! InsertFiglet()"{
     let text = input("Text: ")
     let font = input("Font: ", "big")
     let lineBegin = input("Begin of line: ", " * ")
     execute "r!figlet -w 150 ".shellescape(text)." -f ".shellescape(font)."|sed -e 's/\\(.*\\)/".lineBegin."\\1/'|sed -e 's/ \\+$//'"
 endfunction
 nmap <leader>z :call InsertFiglet()<CR>
+"}
+
+function! ArrowKeysToggle()"{
+  if g:arrow_keys_enabled == 1
+    call DisableArrowKeys()
+    echo "Disabling arrow keys"
+    let g:arrow_keys_enabled = 0
+  else
+    call EnableArrowKeys()
+    echo "Enabling arrow keys"
+    let g:arrow_keys_enabled = 1
+  end
+endfunc
+
+function! EnableArrowKeys()"{
+  noremap <Up> k
+  inoremap <Up> <Up>
+  noremap <Down> j
+  inoremap <Down> <Down>
+  noremap <Left> h
+  inoremap <Left> <Left>
+  noremap <Right> l
+  inoremap <Right> <Right>
+endfunc
+"}
+
+function! DisableArrowKeys()"{
+  noremap <Up> <nop>
+  inoremap <Up> <nop>
+  noremap <Down> <nop>
+  inoremap <Down> <nop>
+  noremap <Left> <nop>
+  inoremap <Left> <nop>
+  noremap <Right> <nop>
+  inoremap <Right> <nop>
+endfunc
+"}
+
+"}
 
 "}
 
@@ -802,7 +879,7 @@ let ruby_operators = 1
 " Gui setting"{
 " =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 
-if s:is_running_gui
+if s:is_running_gui || &term == 256
     set antialias
     set lines=30
     set columns=120
@@ -856,9 +933,7 @@ elseif isdirectory(expand($VIMBUNDLE) . "/csapprox")
     " disable CSApprox
     let g:CSApprox_loaded=1
 else
-    set t_Co=256
-    colorscheme desert
-    let g:colors_name="desert"
+    colorscheme mycolorstty
 endif
 
 set ttyfast
@@ -1034,11 +1109,20 @@ set pastetoggle=<F12>
 " Mapmode-n"{
 " =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 
-" Unmap arrow keys
-noremap <Up> <c-W>k
-noremap <Down> <c-W>j
-noremap <Left> :bprev <CR>
-noremap <Right> :bnext<CR>
+"Enable/Disable Arrow Keys
+"in .vimrc.before.local
+"let g:arrow_keys_enabled = 1
+
+noremap <Up> <nop>
+noremap <Down> <nop>
+noremap <Left> <nop>
+noremap <Right> <nop>
+
+"" Unmap arrow keys
+"noremap <Up> <c-W>k
+"noremap <Down> <c-W>j
+"noremap <Left> :bprev <CR>
+"noremap <Right> :bnext<CR>
 
 " Home row jump to start and end of line
 noremap H ^
@@ -1100,6 +1184,17 @@ vnoremap > >gv
 
 " Mapmode-nv"{
 " =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
+
+" Fast saving
+nnoremap <Leader>w :w<CR>
+vnoremap <Leader>w <Esc>:w<CR>
+nnoremap <C-s> :w<CR>
+inoremap <C-s> <Esc>:w<CR>
+vnoremap <C-s> <Esc>:w<CR>
+
+nnoremap <Leader>x :x<CR>
+vnoremap <Leader>x <Esc>:x<C>
+
 
 " Yank to Clipboard 
 nnoremap <C-y> "+y
@@ -2275,5 +2370,7 @@ endif
 " Search and Replace"{
 " http://vim.wikia.com/wiki/Search_and_replace
 "}
+
+" :%!column -t
 
 "}
