@@ -3,3 +3,4 @@
 .vim/session.vim
 *.local
 .git/*
+.gitmodules
