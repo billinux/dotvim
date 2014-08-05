@@ -8,7 +8,7 @@
 * [Git](http://git-scm.com/) 1.5 or newer
 * [POSIX shell](http://pubs.opengroup.org/onlinepubs/009695399/utilities/sh.html) POSIX Shell
 
-----------------------
+
 ## Mac OS X (Unix-like)
 
     $ cd ~
@@ -56,7 +56,7 @@ Build for i386 and x86_64:
 Note: if you want to use SUN compiler, you can use *SUNCC* variable
     $ gmake SUNCC=cc
 
-----------------------
+
 ## Windows
 
 As administrator (or mklink doesn't work)
