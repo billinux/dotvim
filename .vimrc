@@ -32,8 +32,8 @@ filetype off
 " CATEGORY: Startup"{
 " =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 
-set secure                                          " locks down the exrc setting
-set exrc                                            " enable cwd .vimrc files
+"set secure                                          " locks down the exrc setting
+"set exrc                                            " enable cwd .vimrc files
 
 if !has('vim_starting')
   let s:tmp = &runtimepath
@@ -85,25 +85,19 @@ endif
 " CATEGORY: Config OS"{
 " =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 
+set runtimepath^=~/.vim
+set runtimepath+=~/.vim/after
+let $VIMHOME=expand('~/.vim')
+let $VIMBUNDLE = expand($VIMHOME . '/bundle')
+let $DROPBOXDIR = expand('~/Dropbox')
+
+" For Windows
+" ----------------------------------------------------------------
 if s:is_running_win
-    " For Windows
-    " ----------------------------------------------------------------
     set shellslash
     let $HOME=$USERPROFILE
-    let $VIMHOME=expand($VIM.'/vimfiles')
-    let $VIMBUNDLE=expand($VIM.'/vimfiles/bundle')
-    let $DROPBOXDIR = expand('~/Dropbox')
-    let $VIMCONFIGDIR = expand('~/projects/vimfiles')
-    set runtimepath+=$VIMHOME,$VIMBUNDLE,$HOME/.vim,$VIM/vimfiles,$VIMRUNTIME,$VIM/vimfiles/after,$HOME/.vim/after
     set clipboard=unnamed
     behave mswin
-else
-    " For Linux
-    " ----------------------------------------------------------------
-    let $VIMHOME=expand('~/.vim')
-    let $VIMBUNDLE = expand($VIMHOME . '/bundle')
-    let $DROPBOXDIR = expand('~/Dropbox')"{"}
-    let $VIMCONFIGDIR = expand('~/projects/vimfiles')
 endif
 
 if s:is_running_macunix
@@ -171,7 +165,8 @@ NeoBundleFetch 'shougo/neobundle.vim'
 " Required to run vimshell interactively
 NeoBundle 'shougo/vimproc.vim', {
             \'build': {
-            \   'windows': 'make -f make_mingw64.mak',
+            \   'win32': 'mingw32-make -f make_mingw32.mak CC=mingw32-gcc',
+            \   'win64': 'make -f make_mingw64.mak',
             \   'cygwin' : 'make -f make_cygwin.mak',
             \   'mac'    : 'make -f make_mac.mak',
             \   'unix'   : 'make -f make_unix.mak',
@@ -1196,7 +1191,7 @@ nnoremap <Leader>x :x<CR>
 vnoremap <Leader>x <Esc>:x<C>
 
 
-" Yank to Clipboard 
+" Yank to Clipboard
 nnoremap <C-y> "+y
 vnoremap <C-y> "+y
 
@@ -1440,7 +1435,7 @@ endif
 "   wget https://github.com/Lokaltog/powerline/raw/develop/font/PowerlineSymbols.otf
 "   wget https://github.com/Lokaltog/powerline/raw/develop/font/10-powerline-symbols.conf
 "   Merge the contents of 10-powerline-symbols.conf to ~/.fonts.conf
-"   fc-cache -vf ~/.fonts 
+"   fc-cache -vf ~/.fonts
 
 " 2. To view symbols ans specials characters in terminal :
 "   gnome-terminal: change the default text font
@@ -1601,10 +1596,7 @@ endif
 "   let g:billinux_no_omni_complete = 1
 if !exists('g:billinux_no_omni_complete')
     if has("autocmd") && exists("+omnifunc")
-        autocmd Filetype * 
-            \if &omnifunc == "" |
-            \setlocal omnifunc=syntaxcomplete#Complete |
-            \endif
+        autocmd Filetype * if &omnifunc == "" | setlocal omnifunc=syntaxcomplete#Complete | endif
     endif
 
     hi Pmenu  guifg=#000000 guibg=#F8F8F8 ctermfg=black ctermbg=Lightgray
@@ -1741,8 +1733,8 @@ if count(g:billinux_bundle_groups, 'neocomplete')
                 endif
             endfunction
 
-            " <CR> close popup and save indent or expand snippet 
-            imap <expr> <CR> CleverCr() 
+            " <CR> close popup and save indent or expand snippet
+            imap <expr> <CR> CleverCr()
             " <C-h>, <BS>: close popup and delete backword char.
             inoremap <expr><BS> neocomplete#smart_close_popup()."\<C-h>"
             inoremap <expr><C-y> neocomplete#smart_close_popup()
@@ -1756,7 +1748,7 @@ if count(g:billinux_bundle_groups, 'neocomplete')
         function! CleverTab()
             if pumvisible()
                 return "\<C-n>"
-            endif 
+            endif
             let substr = strpart(getline('.'), 0, col('.') - 1)
             let substr = matchstr(substr, '[^ \t]*$')
             if strlen(substr) == 0
@@ -1812,7 +1804,7 @@ elseif count(g:billinux_bundle_groups, 'neocomplcache')
     endif
     let g:neocomplcache_keyword_patterns._ = '\h\w*'
 
-    " Plugin key-mappings 
+    " Plugin key-mappings
         " These two lines conflict with the default digraph mapping of <C-K>
         imap <C-k> <Plug>(neosnippet_expand_or_jump)
         smap <C-k> <Plug>(neosnippet_expand_or_jump)
@@ -1851,7 +1843,7 @@ elseif count(g:billinux_bundle_groups, 'neocomplcache')
                 endif
             endfunction
 
-            " <CR> close popup and save indent or expand snippet 
+            " <CR> close popup and save indent or expand snippet
             imap <expr> <CR> CleverCr()
 
             " <CR>: close popup
@@ -2039,7 +2031,7 @@ if isdirectory(expand($VIMBUNDLE) . "/DoxygenToolkit.vim")
     let g:DoxygenToolkit_blockHeader="--------------------------------------------------------------------------"
     let g:DoxygenToolkit_blockFooter="--------------------------------------------------------------------------"
     let g:DoxygenToolkit_authorName="Bill Linux"
-    let g:DoxygenToolkit_licenseTag="My own license" 
+    let g:DoxygenToolkit_licenseTag="My own license"
 endif
 "}
 
@@ -2344,8 +2336,8 @@ endif
 " :g/vim/ normal @a (on the lines containing 'vim' pattern
 " On a function with key mapping
 "function! CalculateAge()
-"    normal 03wdei^R=2012-^R"^M^[0j 
-"endfunction 
+"    normal 03wdei^R=2012-^R"^M^[0j
+"endfunction
 " nnoremap <leader>a :call CalculateAge()<CR>
 " To show your 'a' macro: "ap
 " Modify whatever you want in that macro and : ^"ay$ to insert changes into
