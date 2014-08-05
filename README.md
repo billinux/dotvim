@@ -63,29 +63,19 @@ As administrator (or mklink doesn't work)
     > cd %HOMEPATH%
 
 ### Clone the repository
-
     > git clone https://github.com/billinux/dotvim.git dotvim
-
 ### Symlink files
-
     > mklink .vimrc dotvim\.vimrc
     > mklink .vimrc.before dotvim\.vimrc.before
     > mklink /D .vim dotvim\.vim
-
 ### Create your own local environment
-
     > copy .vimrc.before.local
-
 ### Install bundles
-
     > cd .vim
     > git submodule update --init
     > vim +qall
-
 ### After installing  bundles
-
     > cd bundle\vimproc.vim
-
 ### Compile vimproc according your achitecture (x86, x64)
 Note: in Windows, using MinGW is recommanded
 Note: if you have not "gcc" binary, you must change $CC value
@@ -108,10 +98,8 @@ Supposed the dotvim directory is installed in *~/Dropbox/Safe/dotvim*
     $ ln -sfn ~/Dropbox/Safe/dotvim/.vim ~/.vim
     $ ln -sfn ~/Dropbox/Safe/dotvim/.vimrc ~/.vimrc
     $ ln -sfn ~/Dropbox/Safe/dotvim/.vimrc.before ~/.vimrc.before
-
 #### Create your own local environment
     $ touch ~/.vimrc.before.local
-
 ### Windows
     > mklink "C:\Users\YourUserName\.vimrc" "C:\Users\YourUserName\Dropbox\Safe\.vimrc"
     > mklink /D "C:\Users\YourUserName\.vim" "C:\Users\YourUserName\Dropbox\Safe\.vim"
