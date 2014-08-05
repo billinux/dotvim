@@ -473,8 +473,6 @@ augroup Text
     " Navigate row by row through wrapped text.
     au BufReadPre * nmap k gk
     au BufReadPre * nmap j gj
-    " Correct filetype detection for *.md files.
-    au BufRead,BufNewFile *.md set filetype=markdown
 augroup END
 "}
 
@@ -551,6 +549,7 @@ augroup Filetype
 
     " ---------------------------------------------------[Markdown]---
     autocmd BufNewFile,BufRead *.md,*.mkd,*.markdown set filetype=markdown
+    autocmd BufRead *.md,*.mkd,*.markdown set ai formatoptions=tcroqn2 comments=n:>
     autocmd FileType markdown set wrap linebreak spell
 
     " ----------------------------------------------------------[C]---
