@@ -937,8 +937,8 @@ autocmd WinEnter * setlocal cursorline
 " =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 
 set backspace=indent,eol,start
-set viewdir=$VIMHOME/.cache/view
-set backupdir=$VIMHOME/.cache/backup
+set viewdir=~/.vim/vim_tmp/view
+set backupdir=~/.vim/vim_tmp/backup
 set splitright
 set splitbelow
 set tabpagemax=15
@@ -984,19 +984,19 @@ endif
 
 set noswapfile
 
-if !isdirectory($VIMHOME . "/.cache/view")
-    call mkdir($VIMHOME . "/.cache/view", "p")
+if !isdirectory(&viewdir)
+    call mkdir(&viewdir, "p")
 endif
-if !isdirectory($VIMHOME . "/.cache/backup")
-    call mkdir($VIMHOME . "/.cache/backup", "p")
+if !isdirectory(&backupdir)
+    call mkdir(&backupdir, "p")
 endif
 
 if has('persistent_undo')
-    if !isdirectory($VIMHOME . "/.cache/undo")
-        call mkdir($VIMHOME . "/.cache/undo", "p")
+    if !isdirectory(&undodir)
+        call mkdir(&undodir, "p")
     endif
-    set undodir=$VIMHOME/.cache/undo
     set undofile
+    set undodir=~/.vim/vim_tmp/undo
     set undolevels=2048
     set undoreload=65538
 endif

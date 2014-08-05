@@ -1,5 +1,5 @@
 .vim/bundle
-.vim/.cache
+.vim/vim_tmp/
 .vim/session.vim
 *.local
 .git/*
