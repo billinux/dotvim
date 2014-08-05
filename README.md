@@ -100,6 +100,7 @@ Note: if you have not "gcc" binary, you must change $CC value
     > mingw32-make -f make_mingw64.mak
 
 ## Dropbox
+Supposed the dotvim directory is installed in *~/Dropbox/Safe/dotvim*
 
 ### Unix-like
 
@@ -112,8 +113,8 @@ Note: if you have not "gcc" binary, you must change $CC value
     $ touch ~/.vimrc.before.local
 
 ### Windows
-    > mklink "C:\Users\YourUserName\.vimrc" "C:\Users\YourUserName\Dropbox\Path_To_vimrc\.vimrc"
-    > mklink /D "C:\Users\YourUserName\.vim" "C:\Users\YourUserName\Dropbox\Path_To_vimrc\.vim"
+    > mklink "C:\Users\YourUserName\.vimrc" "C:\Users\YourUserName\Dropbox\Safe\.vimrc"
+    > mklink /D "C:\Users\YourUserName\.vim" "C:\Users\YourUserName\Dropbox\Safe\.vim"
 
 ## Author
 
