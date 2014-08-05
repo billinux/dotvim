@@ -47,10 +47,8 @@
 Note: if you want to build for multiple architectures, you can use *ARCHS* and *CC* variables
 Build for i386 and x86_64:
     $ make ARCHS='i386 x86_64'
-
 #### FreeBSD
     $ make
-
 #### Solaris
     $ gmake
 Note: if you want to use SUN compiler, you can use *SUNCC* variable
@@ -100,6 +98,22 @@ Note: if you have not "gcc" binary, you must change $CC value
     > mingw32-make -f make_mingw32.mak CC=mingw32-gcc
 #### Windows (Vim 64 bits)
     > mingw32-make -f make_mingw64.mak
+
+## Dropbox
+
+### Unix-like
+
+#### Symlink files
+    $ ln -sfn ~/Dropbox/Safe/dotvim/.vim ~/.vim
+    $ ln -sfn ~/Dropbox/Safe/dotvim/.vimrc ~/.vimrc
+    $ ln -sfn ~/Dropbox/Safe/dotvim/.vimrc.before ~/.vimrc.before
+
+#### Create your own local environment
+    $ touch ~/.vimrc.before.local
+
+### Windows
+    > mklink "C:\Users\YourUserName\.vimrc" "C:\Users\YourUserName\Dropbox\Path_To_vimrc\.vimrc"
+    > mklink /D "C:\Users\YourUserName\.vim" "C:\Users\YourUserName\Dropbox\Path_To_vimrc\.vim"
 
 ## Author
 
