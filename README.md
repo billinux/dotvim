@@ -2,88 +2,88 @@
 [1]: http://www.vim.org/images/vim_editor.gif
 [2]: http://www.vim.org/ "Click to visit vim.org"
 
-## Requirements
+# Requirements
 
 * [Vim](http://www.vim.org/) 7.3 or newer
 * [Git](http://git-scm.com/) 1.5 or newer
 * [POSIX shell](http://pubs.opengroup.org/onlinepubs/009695399/utilities/sh.html) POSIX Shell
 
-## Mac OS X (Unix-like)
+# Mac OS X (Unix-like)
 
     $ cd ~
 
-### Clone the repository
+## Clone the repository
 
     $ git clone https://github.com/billinux/dotvim.git ~/dotvim
 
-### Backup your Vim config
+## Backup your Vim config
 
     $ mv ~/.vimrc{,.bak}
     $ mv ~/.vimrc.before{,.bak}
     $ mv ~/.vimrc.before.local{,.bak}
     $ mv ~/.vim{,.bak}
 
-### Symlink files
+## Symlink files
 
     $ ln -sfn ~/dotvim/.vimrc ~/.vimrc
     $ ln -sfn ~/dotvim/.vimrc.before ~/.vimrc.before
 
-### Create your own local environment
+## Create your own local environment
 
     $ touch ~/.vimrc.before.local
 
-### Install Bundles
+## Install Bundles
 
     $ cd ~/.vim
     $ git submodule update --init
     $ vim +qall
 
-#### Compile vimproc according your achitecture (i386, x86_64)
+### Compile vimproc according your achitecture (i386, x86_64)
     $ cd ~/.vim/bundle/vimproc.vim
 
-##### Linux, Mac OS X
+#### Linux, Mac OS X
     $ make
 Note: if you want to build for multiple architectures, you can use *ARCHS* and *CC* variables
-Build for i386 and x86__64:
+Build for i386 and x86_64:
     $ make ARCHS='i386 x86_64'
 
-##### FreeBSD
+#### FreeBSD
     $ make
 
-##### Solaris
+#### Solaris
     $ gmake
 Note: if you want to use SUN compiler, you can use *SUNCC* variable
     $ gmake SUNCC=cc
 
 
-## Windows
+# Windows
 
 As administrator (or mklink doesn't work)
 
     > cmd
     > cd %HOMEPATH%
 
-### Clone the repository
+## Clone the repository
 
     > git clone https://github.com/billinux/dotvim.git dotvim
 
-### Symlink files
+## Symlink files
 
     > mklink .vimrc dotvim\.vimrc
     > mklink .vimrc.before dotvim\.vimrc.before
     > mklink /D .vim dotvim\.vim
 
-### Create your own local environment
+## Create your own local environment
 
     > copy .vimrc.before.local
 
-### Install bundles
+## Install bundles
 
     > cd .vim
     > git submodule update --init
     > vim +qall
 
-### After installing  bundles
+## After installing  bundles
 
     > cd bundle\vimproc.vim
 
@@ -92,13 +92,14 @@ Note: in Windows, using MinGW is recommanded
 Note: if you have not "gcc" binary, you must change $CC value
 
     $ cd ~/.vim/bundle/vimproc.vim
-For Windows (Vim 32 bits):
+
+#### Windows (Vim 32 bits)
     > mingw32-make -f make_mingw32.mak
-For Windows (Vim 32 bits) using cygwin:
+#### Windows (Vim 32 bits) using cygwin
     > mingw32-make -f make_mingw32.mak CC=mingw32-gcc
-For Windows (Vim 64 bits):
+#### Windows (Vim 64 bits)
     > mingw32-make -f make_mingw64.mak
 
-## Author
+# Author
 
 [Bill Linux](mailto:b.linux@laposte.net)
