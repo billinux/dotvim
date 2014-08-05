@@ -1,9 +1,6 @@
 " SECTION: Notes"{
 " ====================================================================
-
 " vim:set ft=vim
-"
-"
 " ____  _ _ _ _                        _       _         _
 "|  _ \(_) | (_)                      | |     | |       (_)
 "| |_) |_| | |_ _ __  _   ___  __   __| | ___ | |___   ___ _ __ ___
@@ -11,16 +8,12 @@
 "| |_) | | | | | | | | |_| |>  <  | (_| | (_) | |_ \ V /| | | | | | |
 "|____/|_|_|_|_|_| |_|\__,_/_/\_\  \__,_|\___/ \__| \_/ |_|_| |_| |_|
 "
-"
-"
 " This my personal .vimrc, I don't recommend you copy it, just
 " use the pieces you want (and understands!). When you copy a
 " .vimrc in the entirety, weird and unexpexted things can happen
 "
 " You can use ~/.vimrc.before.local and ~/.vimrc.private
 " for your local and private settings
-
-
 "}
 
 " SECTION: Initialize"{
@@ -31,9 +24,6 @@ filetype off
 
 " CATEGORY: Startup"{
 " =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
-
-"set secure                                          " locks down the exrc setting
-"set exrc                                            " enable cwd .vimrc files
 
 if !has('vim_starting')
   let s:tmp = &runtimepath
@@ -46,7 +36,6 @@ endif
 " control sequences when a user enters(t_SI) and leaves(t_EI)
 let &t_SI .= "\e[3 q"
 let &t_EI .= "\e[1 q"
-
 "}
 
 " CATEGORY: Environment"{
@@ -100,12 +89,14 @@ if s:is_running_win
     behave mswin
 endif
 
-if s:is_running_macunix
-    set clipboard=unnamed
-endif
-
 if !s:is_running_win
     set shell=/bin/bash
+endif
+
+" For Mac
+" ----------------------------------------------------------------
+if s:is_running_macunix
+    set clipboard=unnamed
 endif
 "}
 
@@ -133,13 +124,12 @@ if !exists('g:neobundleAlreadyExists')
     let neobundleAlreadyExists=1
 endif
 
-"let neobundle_readme=expand('$VIMBUNDLE/neobundle.vim/README.md')
 let neobundle_readme=expand($VIMBUNDLE).'/neobundle.vim/README.md'
 
 if !filereadable(neobundle_readme)
     echo "Installing NeoBundle..."
     echo ""
-    "if isdirectory(expand('$VIMBUNDLE')) == 0
+
     if !isdirectory(expand('$VIMBUNDLE'))
         call mkdir(expand('$VIMBUNDLE'),'p')
     endif
@@ -465,8 +455,6 @@ filetype plugin indent on
 
 " Vimrc"{
 " --------------------------------------------------------------------
-
-
 augroup VIMRC
 "    au!
 "    autocmd BufWritePost  .vimrc source ~/.vimrc
@@ -475,7 +463,6 @@ augroup END
 
 " Text"{
 " --------------------------------------------------------------------
-
 augroup Text
     au!
     " Automatically save session on exit.
@@ -493,7 +480,6 @@ augroup END
 
 " Programming"{
 " --------------------------------------------------------------------
-
 augroup Programming
     au BufRead,BufNewFile *.html set shiftwidth=2
     au BufRead,BufNewFile *.html set softtabstop=2
@@ -511,7 +497,6 @@ augroup END
 
 " Filetype"{
 " --------------------------------------------------------------------
-
 augroup Filetype
     au!
 
@@ -577,7 +562,6 @@ augroup END
 
 " Number"{
 " --------------------------------------------------------------------
-
 augroup Number
     au!
     autocmd FocusLost * :set number
@@ -589,7 +573,6 @@ augroup END
 
 " Autoview"{
 " --------------------------------------------------------------------
-
 augroup Autoview
     au!
     " Autosave & Load Views (?* or *).
@@ -600,7 +583,6 @@ augroup END
 
 " Misc"{
 " --------------------------------------------------------------------
-
 augroup Misc
     " Save when losing focus
     au FocusLost * :wa
@@ -830,7 +812,7 @@ if s:is_running_win
         setglobal fileencoding=utf-8
         set fileencodings=ucs-bom,utf-8,utf-16le,cp1252,iso-8859-15
     endif
-    set fileformat=dos
+
 else
     set termencoding=utf-8
     set fileencoding=utf-8
@@ -1113,12 +1095,6 @@ noremap <Down> <nop>
 noremap <Left> <nop>
 noremap <Right> <nop>
 
-"" Unmap arrow keys
-"noremap <Up> <c-W>k
-"noremap <Down> <c-W>j
-"noremap <Left> :bprev <CR>
-"noremap <Right> :bnext<CR>
-
 " Home row jump to start and end of line
 noremap H ^
 noremap L $
@@ -1189,7 +1165,6 @@ vnoremap <C-s> <Esc>:w<CR>
 
 nnoremap <Leader>x :x<CR>
 vnoremap <Leader>x <Esc>:x<C>
-
 
 " Yank to Clipboard
 nnoremap <C-y> "+y
