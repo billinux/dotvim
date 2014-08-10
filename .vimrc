@@ -1,6 +1,6 @@
 " SECTION: Notes"{
 " ====================================================================
-" vim:set ft=vim
+" vim:set ft=vim sw=4 ts=4 sts=4 et fdm=marker fmr={,}:
 " ____  _ _ _ _                        _       _         _
 "|  _ \(_) | (_)                      | |     | |       (_)
 "| |_) |_| | |_ _ __  _   ___  __   __| | ___ | |___   ___ _ __ ___
@@ -36,6 +36,11 @@ endif
 " control sequences when a user enters(t_SI) and leaves(t_EI)
 let &t_SI .= "\e[3 q"
 let &t_EI .= "\e[1 q"
+
+" Put these parameters in your .vimrc.before.local
+let g:billinux_snips_author="Bill Linux"
+let g:billinux_snips_company="Billinux ltd"
+
 "}
 
 " CATEGORY: Environment"{
@@ -587,7 +592,7 @@ augroup Misc
     au FocusLost * :wa
 
     " Set scripts to be executable from the shell
-    au BufWritePost * if getline(1) =~ "^#!" | if getline(1) =~ "/bin/" | silent !chmod +x <afile> | endif | endif
+    "au BufWritePost * if getline(1) =~ "^#!" | if getline(1) =~ "/bin/" | silent !chmod a+x <afile> | endif | endif
 augroup END
 "}
 "}
@@ -595,7 +600,8 @@ augroup END
 " SECTION: Functions"{
 " ====================================================================
 
-function! NeatFoldText()"{
+" Insert your own foldtext"{
+function! NeatFoldText()
   let line = ' ' . substitute(getline(v:foldstart), '^\s*"\?\s*\|\s*"\?\s*' . '\d*\s*', '', 'g') . ' '
   let lines_count = v:foldend - v:foldstart + 1
   let lines_count_text = '| ' . printf("%10s", lines_count . ' lines') . ' |'
@@ -608,21 +614,23 @@ endfunction
 "set foldtext=NeatFoldText()
 "}
 
-function! LoadSession()"{
+" Backup your session"{
+function! LoadSession()
     " Load last vim session
     if argc() == 0
         execute 'source $VIMHOME/session.vim'
     endif
 endfunction
-"}
 
-function! SaveSession()"{
+
+function! SaveSession()
     " Save current vim session.
     execute 'mksession! $VIMHOME/session.vim'
 endfunction
 "}
 
-function! NumberToggle()"{
+" Toggle number"{
+function! NumberToggle()
     if(&relativenumber == 1)
         set norelativenumber
         set number
@@ -633,7 +641,8 @@ endif
 endfunc
 "}
 
-function! StripTrailingWhitespace()"{
+" Restore last cursor position"{
+function! StripTrailingWhitespace()
     " Preparation: save last search, and cursor position.
     let _s=@/
     let l = line(".")
@@ -646,7 +655,8 @@ function! StripTrailingWhitespace()"{
 endfunction
 "}
 
-function! MakeViewCheck()"{
+" Make views to keep your last folding state"{
+function! MakeViewCheck()
     if has('quickfix') && &buftype =~ 'nofile' | return 0 | endif
     if expand('%') =~ '\[.*\]' | return 0 | endif
     if empty(glob(expand('%:p'))) | return 0 | endif
@@ -665,7 +675,7 @@ function! MakeViewCheck()"{
 endfunction
 "}
 
-" function! Pastetoggle()"{
+" Pastetoggle"{
 function! WrapForTmux(s)
     if !exists('$TMUX')
     return a:s
@@ -689,7 +699,8 @@ endfunction
 inoremap <special> <expr> <Esc>[200~ XTermPasteBegin()
 "}
 
-function! SourceAllFiles(dir)"{
+" Source all files"{
+function! SourceAllFiles(dir)
 " Source files in a directory
     let l:findop=system("find ".a:dir." -name \"*.vimrc\"")
     let l:sourcenames=split(l:findop,"\n")
@@ -700,7 +711,8 @@ endfunction
 " call Sourceallfiles($HOME."/.vim/vimrc")
 "}
 
-function! VimrcTOHtml()"{
+" Translate vimrc into html"{
+function! VimrcTOHtml()
     TOhtml
     try
         silent exe '%s/&quot;\(\s\+\)\*&gt; \(.\+\)</"\1<a href="#\2" style="color: #bdf">\2<\/a></g'
@@ -717,7 +729,8 @@ function! VimrcTOHtml()"{
 endfunction
 "}
 
-function! SassCompile()"{
+" Compile sass file"{
+function! SassCompile()
     if g:sass_enabled == 0
         return
     endif
@@ -750,7 +763,8 @@ function! SassCompile()"{
 endfunction
 "}
 
-function! InsertFiglet()"{
+" Insert Figlet expression"{
+function! InsertFiglet()
     let text = input("Text: ")
     let font = input("Font: ", "big")
     let lineBegin = input("Begin of line: ", " * ")
@@ -759,7 +773,8 @@ endfunction
 nmap <leader>z :call InsertFiglet()<CR>
 "}
 
-function! ArrowKeysToggle()"{
+" Toggle arrow keys"{
+function! ArrowKeysToggle()
   if g:arrow_keys_enabled == 1
     call DisableArrowKeys()
     echo "Disabling arrow keys"
@@ -771,7 +786,8 @@ function! ArrowKeysToggle()"{
   end
 endfunc
 
-function! EnableArrowKeys()"{
+" Enable arrow keys"{
+function! EnableArrowKeys()
   noremap <Up> k
   inoremap <Up> <Up>
   noremap <Down> j
@@ -783,7 +799,8 @@ function! EnableArrowKeys()"{
 endfunc
 "}
 
-function! DisableArrowKeys()"{
+" Disable arrow keys"{
+function! DisableArrowKeys()
   noremap <Up> <nop>
   inoremap <Up> <nop>
   noremap <Down> <nop>
@@ -794,8 +811,16 @@ function! DisableArrowKeys()"{
   inoremap <Right> <nop>
 endfunc
 "}
-
 "}
+
+" Modechange
+function! ModeChange()
+  if getline(1) =~ "^#!"
+    if getline(1) =~ "/bin/"
+      silent !chmod a+x <afile>
+    endif
+  endif
+endfunction
 
 "}
 
