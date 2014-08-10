@@ -1,3 +1,3 @@
 [submodule ".vim/conf/color-me-sass"]
 	path = .vim/conf/color-me-sass
-	url = https://github.com/billinux/color-me-sass.git
+	url = https://github.com/RichardBray/color-me-sass.git

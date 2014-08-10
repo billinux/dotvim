@@ -71,9 +71,18 @@ let s:is_using_colorful_term=s:is_using_term_xterm ||
                             \s:is_using_term_rxvt ||
                             \s:is_using_term_screen
 
+" Cursor settings. This makes terminal vim sooo much nicer!
+" Tmux will only forward escape sequences to the terminal if surrounded by a DCS
+" sequence
 if exists('$TMUX')
     set clipboard=
+    let &t_SI = "\<Esc>Ptmux;\<Esc>\<Esc>]50;CursorShape=1\x7\<Esc>\\"
+    let &t_EI = "\<Esc>Ptmux;\<Esc>\<Esc>]50;CursorShape=0\x7\<Esc>\\"
+else
+    let &t_SI = "\<Esc>]50;CursorShape=1\x7"
+    let &t_EI = "\<Esc>]50;CursorShape=0\x7"
 endif
+
 "}
 
 " CATEGORY: Config OS"{
@@ -212,6 +221,7 @@ if !exists("g:override_billinux_bundles")
 
     if count(g:billinux_bundle_groups, 'general')
         NeoBundle 'scrooloose/nerdtree'
+        NeoBundle 'scrooloose/nerdcommenter'
         NeoBundle 'kien/ctrlp.vim'
         NeoBundle 'tacahiroy/ctrlp-funky'
         NeoBundle 'shougo/unite.vim'
@@ -378,6 +388,7 @@ endif
         if !exists('g:billinux_no_extra_bundles')
             NeoBundle 'tpope/vim-haml'
             NeoBundle 'gorodinskiy/vim-coloresque'
+            NeoBundle 'othree/html5.vim'
         endif
     endif
 "}
@@ -410,6 +421,7 @@ endif
             let g:rubycomplete_buffer_loading = 1
             "let g:rubycomplete_classes_in_global = 1
             "let g:rubycomplete_rails = 1
+            NeoBundle 'vim-ruby/vim-ruby'
         endif
     endif
 "}
@@ -420,10 +432,13 @@ endif
     if count(g:billinux_bundle_groups, 'colors')
         NeoBundle 'altercation/vim-colors-solarized'
         NeoBundle 'tomasr/molokai'
+        NeoBundle 'nanotech/jellybeans.vim'
         NeoBundle 'reedes/vim-thematic'
 
         if !exists('g:billinux_no_extra_bundles')
             NeoBundle 'flazz/vim-colorschemes'
+            NeoBundle 'vim-scripts/wombat256.vim'
+            NeoBundle 'chriskempson/tomorrow-theme'
         endif
     endif
 "}
@@ -433,6 +448,7 @@ endif
 
     if count(g:billinux_bundle_groups, 'misc')
         NeoBundle 'tpope/vim-markdown'
+        NeoBundle 'terryma/vim-instant-markdown'
         NeoBundle "chrisbra/csv.vim"
     endif
 "}
@@ -524,12 +540,13 @@ augroup Filetype
 
     " -------------------------------------------------------[Sass]---
     autocmd BufNewFile,BufRead *.sass set filetype=sass
+    "au BufRead,BufNewFile *.scss,*.sass source ~/.vim/conf/color-me-sass/_color-me-sass.scss
 
     " -------------------------------------------------------[Scss]---
     let g:sass_output_file = ""
     let g:sass_enabled = 1
     let g:sass_path_maps = {}
-    autocmd BufWritePost *.scss call SassCompile()
+"    autocmd BufWritePost *.scss call SassCompile()
 
     " -------------------------------------------------[Javascript]---
     autocmd BufNewFile,BufRead *.js set filetype=javascript
